@@ -1,0 +1,77 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="brand-header">
+      <h2>MPloyChek</h2>
+      <p>Digital Background Verification Portal</p>
+    </div>
+
+    <!-- Error Message Alert -->
+    <div *ngIf="errorMessage()" class="error-alert">
+      {{ errorMessage() }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Username input -->
+      <div class="form-group">
+        <label for="username">Username / User ID</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          [(ngModel)]="username" 
+          placeholder="Enter username" 
+          required 
+          [disabled]="isLoading()" />
+      </div>
+
+      <!-- Password input -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          [(ngModel)]="password" 
+          placeholder="Enter password" 
+          required 
+          [disabled]="isLoading()" />
+      </div>
+
+      <!-- Role Select Dropdown -->
+      <div class="form-group">
+        <label for="role">Select Your Role</label>
+        <select 
+          id="role" 
+          name="role" 
+          [(ngModel)]="role" 
+          [disabled]="isLoading()">
+          <option value="General User">General User</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+
+      <!-- Login Button -->
+      <button type="submit" class="login-btn" [disabled]="isLoading()">
+        <span *ngIf="!isLoading()">Sign In</span>
+        <span *ngIf="isLoading()">Logging in...</span>
+      </button>
+    </form>
+
+    <!-- Quick Demo Login Panel -->
+    <div class="demo-panel">
+      <p class="demo-title">Quick Demo Login</p>
+      <div class="demo-buttons">
+        <button type="button" class="demo-btn admin-btn" (click)="useDemoCredentials('admin')">
+          Admin Demo
+        </button>
+        <button type="button" class="demo-btn user-btn" (click)="useDemoCredentials('general')">
+          General User Demo
+        </button>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      <p>© 2026 NSQTech Private Limited</p>
+    </div>
+  </div>
+</div>

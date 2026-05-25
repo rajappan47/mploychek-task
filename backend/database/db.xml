@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+  <users>
+    <user>
+      <id>1</id>
+      <username>admin</username>
+      <password>admin123</password>
+      <role>Admin</role>
+      <fullName>Melody Fernandez</fullName>
+      <email>melody.f@nsqtech.com</email>
+      <designation>Verification Director</designation>
+      <department>Operations</department>
+    </user>
+    <user>
+      <id>2</id>
+      <username>general</username>
+      <password>general123</password>
+      <role>General User</role>
+      <fullName>Rajappan C</fullName>
+      <email>rajappan.c@nsqtech.com</email>
+      <designation>HR Specialist</designation>
+      <department>Human Resources</department>
+    </user>
+    <user>
+      <id>3</id>
+      <username>johndoe</username>
+      <password>john123</password>
+      <role>General User</role>
+      <fullName>John Doe</fullName>
+      <email>john.doe@partner.com</email>
+      <designation>Recruitment Coordinator</designation>
+      <department>Talent Acquisition</department>
+    </user>
+    <user>
+      <id>4</id>
+      <username>hr_lead</username>
+      <password>lead123</password>
+      <role>Admin</role>
+      <fullName>Sarah Connor</fullName>
+      <email>sarah.c@nsqtech.com</email>
+      <designation>Senior HR Operations Manager</designation>
+      <department>Operations</department>
+    </user>
+  </users>
+  <records>
+    <record>
+      <id>REC-2026-001</id>
+      <candidateName>Alice Smith</candidateName>
+      <email>alice.smith@gmail.com</email>
+      <checkType>Employment Verification</checkType>
+      <company>Google India</company>
+      <status>Verified</status>
+      <completionDate>2026-05-18</completionDate>
+      <userId>2</userId>
+    </record>
+    <record>
+      <id>REC-2026-002</id>
+      <candidateName>Bob Johnson</candidateName>
+      <email>bob.j@outlook.com</email>
+      <checkType>Education Check</checkType>
+      <company>IIT Madras</company>
+      <status>Discrepancy Found</status>
+      <completionDate>2026-05-19</completionDate>
+      <userId>2</userId>
+    </record>
+    <record>
+      <id>REC-2026-003</id>
+      <candidateName>Charlie Brown</candidateName>
+      <email>charlie.b@yahoo.com</email>
+      <checkType>Criminal Background Check</checkType>
+      <company>Standard Check</company>
+      <status>In Progress</status>
+      <completionDate>Pending</completionDate>
+      <userId>2</userId>
+    </record>
+    <record>
+      <id>REC-2026-004</id>
+      <candidateName>Diana Prince</candidateName>
+      <email>diana.p@waynecorp.com</email>
+      <checkType>Address &amp; ID Check</checkType>
+      <company>Global Safe</company>
+      <status>Verified</status>
+      <completionDate>2026-05-14</completionDate>
+      <userId>3</userId>
+    </record>
+    <record>
+      <id>REC-2026-005</id>
+      <candidateName>Ethan Hunt</candidateName>
+      <email>ethan.hunt@imf.org</email>
+      <checkType>Employment Verification</checkType>
+      <company>IMF Solutions</company>
+      <status>In Progress</status>
+      <completionDate>Pending</completionDate>
+      <userId>3</userId>
+    </record>
+    <record>
+      <id>REC-2026-006</id>
+      <candidateName>Fiona Gallagher</candidateName>
+      <email>fiona.g@southside.org</email>
+      <checkType>Credit History Check</checkType>
+      <company>Apex Finance</company>
+      <status>Failed</status>
+      <completionDate>2026-05-10</completionDate>
+      <userId>3</userId>
+    </record>
+  </records>
+</database>

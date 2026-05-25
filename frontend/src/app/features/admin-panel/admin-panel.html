@@ -1,0 +1,203 @@
+<div class="app-layout">
+  <!-- Simple Header Navigation -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="logo">
+        <strong>MPloyChek</strong> Verification
+      </div>
+      <nav class="nav-menu">
+        <a routerLink="/dashboard" class="menu-item">Dashboard</a>
+        <a routerLink="/admin" class="menu-item active">User Manager</a>
+      </nav>
+      <div class="user-profile">
+        <span>Logged in: <strong>{{ authService.currentUser()?.fullName }}</strong> ({{ authService.currentUser()?.role }})</span>
+        <button (click)="logout()" class="logout-btn">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Success Notification -->
+  <div *ngIf="successMessage()" class="simple-toast">
+    {{ successMessage() }}
+  </div>
+
+  <!-- Admin Main Content -->
+  <main class="main-content">
+    <div class="page-title-flex">
+      <div class="page-title">
+        <h1>User Management Directory</h1>
+        <p>Register new system operators, modify profiles, and configure access roles.</p>
+      </div>
+      <button (click)="openAddModal()" class="add-btn">
+        + Add New User
+      </button>
+    </div>
+
+    <!-- Latency Control Card -->
+    <div class="dashboard-card horizontal-card">
+      <div class="horizontal-card-body">
+        <p class="sim-label">User Service Query Delay:</p>
+        <div class="slider-flex">
+          <input 
+            type="range" 
+            name="delayMs" 
+            min="0" 
+            max="5000" 
+            step="500" 
+            [(ngModel)]="delayMs" 
+            class="range-slider" />
+          <span class="delay-tag">{{ delayMs }} ms</span>
+          <button (click)="loadUsers()" class="sync-btn" [disabled]="isLoading()">Refresh</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Metrics -->
+    <div class="metrics-row">
+      <div class="metric-box box-blue">
+        <div class="metric-num">{{ isLoading() ? '-' : totalUsers() }}</div>
+        <div class="metric-label">Registered Accounts</div>
+      </div>
+      <div class="metric-box box-red">
+        <div class="metric-num">{{ isLoading() ? '-' : adminCount() }}</div>
+        <div class="metric-label">System Admins</div>
+      </div>
+      <div class="metric-box box-green">
+        <div class="metric-num">{{ isLoading() ? '-' : userCount() }}</div>
+        <div class="metric-label">General Users</div>
+      </div>
+    </div>
+
+    <!-- User Accounts Table Card -->
+    <div class="dashboard-card table-card">
+      <div class="card-header">
+        <h3>System Operators List</h3>
+      </div>
+
+      <!-- Async loading indicator -->
+      <div *ngIf="isLoading()" class="loading-state">
+        <div class="spinner"></div>
+        <p>Fetching user accounts database...</p>
+      </div>
+
+      <div *ngIf="!isLoading()" class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Username</th>
+              <th>Email Address</th>
+              <th>Designation</th>
+              <th>Department</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users()">
+              <td><code>#{{ user.id }}</code></td>
+              <td><strong>{{ user.fullName }}</strong></td>
+              <td>&#64;{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.designation }}</td>
+              <td>{{ user.department }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="{
+                  'verified': user.role === 'General User',
+                  'failed': user.role === 'Admin'
+                }">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button (click)="openEditModal(user)" class="act-btn edit-btn">Edit</button>
+                  <button 
+                    (click)="deleteUser(user.id)" 
+                    class="act-btn delete-btn" 
+                    [disabled]="authService.currentUser()?.id === user.id">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add/Edit User Simple Popup Modal -->
+  <div *ngIf="showModal()" class="simple-modal-backdrop" (click)="closeModal()">
+    <div class="simple-modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-card-header">
+        <h3>{{ modalTitle() }}</h3>
+        <button (click)="closeModal()" class="close-x">✕</button>
+      </div>
+
+      <div class="modal-card-body">
+        <!-- Error Alert inside Modal -->
+        <div *ngIf="errorMessage()" class="error-alert">
+          {{ errorMessage() }}
+        </div>
+
+        <form (ngSubmit)="saveUser()" class="simple-modal-form">
+          
+          <!-- Role selector -->
+          <div class="modal-form-group">
+            <label for="formRole">Access Authorization Role *</label>
+            <select id="formRole" name="formRole" [(ngModel)]="formRole">
+              <option value="General User">General User</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+
+          <!-- Full Name & Email -->
+          <div class="modal-form-row">
+            <div class="modal-form-group">
+              <label for="fullName">Full Name *</label>
+              <input type="text" id="fullName" name="fullName" [(ngModel)]="formFullName" placeholder="e.g. John Doe" required />
+            </div>
+            <div class="modal-form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" [(ngModel)]="formEmail" placeholder="e.g. john@nsqtech.com" required />
+            </div>
+          </div>
+
+          <!-- Username & Password -->
+          <div class="modal-form-row">
+            <div class="modal-form-group">
+              <label for="username">Login Username ID *</label>
+              <input type="text" id="username" name="username" [(ngModel)]="formUsername" placeholder="e.g. johndoe" required [disabled]="editUserId !== null" />
+            </div>
+            <div class="modal-form-group">
+              <label for="password">Password {{ editUserId === null ? '*' : '(Optional)' }}</label>
+              <input type="password" id="password" name="password" [(ngModel)]="formPassword" placeholder="{{ editUserId === null ? 'Create password' : 'Keep existing password' }}" [required]="editUserId === null" />
+            </div>
+          </div>
+
+          <!-- Designation & Department -->
+          <div class="modal-form-row">
+            <div class="modal-form-group">
+              <label for="designation">Job Designation *</label>
+              <input type="text" id="designation" name="designation" [(ngModel)]="formDesignation" placeholder="e.g. HR Associate" required />
+            </div>
+            <div class="modal-form-group">
+              <label for="department">Department *</label>
+              <input type="text" id="department" name="department" [(ngModel)]="formDepartment" placeholder="e.g. Human Resources" required />
+            </div>
+          </div>
+
+          <div class="modal-card-footer">
+            <button type="button" class="btn-secondary" (click)="closeModal()" [disabled]="isSubmitting()">Cancel</button>
+            <button type="submit" class="btn-primary" [disabled]="isSubmitting()">
+              <span *ngIf="!isSubmitting()">Save User</span>
+              <span *ngIf="isSubmitting()">Saving...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

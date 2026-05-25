@@ -1,0 +1,160 @@
+<div class="app-layout">
+  <!-- Simple Header Navigation -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="logo">
+        <strong>MPloyChek</strong> Verification
+      </div>
+      <nav class="nav-menu">
+        <a routerLink="/dashboard" class="menu-item active">Dashboard</a>
+        <a *ngIf="authService.isAdmin()" routerLink="/admin" class="menu-item">User Manager</a>
+      </nav>
+      <div class="user-profile">
+        <span>Logged in: <strong>{{ authService.currentUser()?.fullName }}</strong> ({{ authService.currentUser()?.role }})</span>
+        <button (click)="logout()" class="logout-btn">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Main Content -->
+  <main class="main-content">
+    <div class="page-title">
+      <h1>Verification Dashboard</h1>
+      <p>Manage candidate screening profiles and verify check statuses.</p>
+    </div>
+
+    <!-- Profile & Simulator Widgets -->
+    <div class="dashboard-grid">
+      <!-- User Details Badges -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Your Account Details</h3>
+        </div>
+        <div class="card-body">
+          <div class="profile-details-list">
+            <div class="detail-row">
+              <span class="label">Name:</span>
+              <span class="value">{{ authService.currentUser()?.fullName }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Job Title:</span>
+              <span class="value">{{ authService.currentUser()?.designation }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Department:</span>
+              <span class="value">{{ authService.currentUser()?.department }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Email:</span>
+              <span class="value">{{ authService.currentUser()?.email }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Role Level:</span>
+              <span class="value">{{ authService.currentUser()?.role }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Latency Simulator Controls -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>API Latency Settings</h3>
+        </div>
+        <div class="card-body">
+          <p class="sim-desc">Adjust the API query delay to showcase asynchronous processing (loading spinner/wait states) on load.</p>
+          
+          <div class="slider-group">
+            <label>API Delay: <strong>{{ delayMs }} ms</strong></label>
+            <input 
+              type="range" 
+              name="delayMs" 
+              min="0" 
+              max="5000" 
+              step="500" 
+              [(ngModel)]="delayMs" 
+              class="range-slider" />
+          </div>
+
+          <button (click)="loadRecords()" class="refresh-btn" [disabled]="isLoading()">
+            Sync Data Records
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Metrics -->
+    <div class="metrics-row">
+      <div class="metric-box box-blue">
+        <div class="metric-num">{{ isLoading() ? '-' : totalChecks() }}</div>
+        <div class="metric-label">Total Checks</div>
+      </div>
+      <div class="metric-box box-green">
+        <div class="metric-num">{{ isLoading() ? '-' : verifiedCount() }}</div>
+        <div class="metric-label">Verified (Cleared)</div>
+      </div>
+      <div class="metric-box box-yellow">
+        <div class="metric-num">{{ isLoading() ? '-' : inProgressCount() }}</div>
+        <div class="metric-label">In Progress</div>
+      </div>
+      <div class="metric-box box-red">
+        <div class="metric-num">{{ isLoading() ? '-' : discrepanciesCount() }}</div>
+        <div class="metric-label">Discrepancy Flags</div>
+      </div>
+    </div>
+
+    <!-- Records Table Section -->
+    <div class="dashboard-card table-card">
+      <div class="card-header flex-header">
+        <h3>Verification Records Registry</h3>
+        <span class="access-badge" [class.admin-access]="authService.isAdmin()">
+          Access Mode: {{ authService.isAdmin() ? 'Full System' : 'Self Records Only' }}
+        </span>
+      </div>
+
+      <!-- Async loading indicator -->
+      <div *ngIf="isLoading()" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading records from Express API with simulated {{ delayMs }}ms delay...</p>
+      </div>
+
+      <div *ngIf="!isLoading()" class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Candidate Name</th>
+              <th>Email</th>
+              <th>Check Type</th>
+              <th>Organization</th>
+              <th>Status</th>
+              <th>Completion Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of records()">
+              <td><code>{{ record.id }}</code></td>
+              <td><strong>{{ record.candidateName }}</strong></td>
+              <td>{{ record.email }}</td>
+              <td>{{ record.checkType }}</td>
+              <td>{{ record.company }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="{
+                  'verified': record.status === 'Verified',
+                  'in-progress': record.status === 'In Progress',
+                  'failed': record.status === 'Discrepancy Found' || record.status === 'Failed'
+                }">
+                  {{ record.status }}
+                </span>
+              </td>
+              <td>{{ record.completionDate }}</td>
+            </tr>
+            <tr *ngIf="records().length === 0">
+              <td colspan="7" class="empty-row">No records found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
