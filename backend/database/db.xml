@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Dummy data used for demonstration purposes only -->
 <database>
   <users>
     <user>
       <id>1</id>
       <username>admin</username>
-      <password>admin123</password>
+      <password>demo123</password>
       <role>Admin</role>
       <fullName>Melody Fernandez</fullName>
-      <email>melody.f@nsqtech.com</email>
+      <email>melody@gmail.com</email>
       <designation>Verification Director</designation>
       <department>Operations</department>
     </user>
     <user>
       <id>2</id>
       <username>general</username>
-      <password>general123</password>
+      <password>demo123</password>
       <role>General User</role>
       <fullName>Rajappan C</fullName>
-      <email>rajappan.c@nsqtech.com</email>
+      <email>rajappan.c@gmail.com</email>
       <designation>HR Specialist</designation>
       <department>Human Resources</department>
     </user>
     <user>
       <id>3</id>
       <username>johndoe</username>
-      <password>john123</password>
+      <password>demo123</password>
       <role>General User</role>
       <fullName>John Doe</fullName>
-      <email>john.doe@partner.com</email>
+      <email>john.doe@gmail.com</email>
       <designation>Recruitment Coordinator</designation>
       <department>Talent Acquisition</department>
     </user>
     <user>
       <id>4</id>
       <username>hr_lead</username>
-      <password>lead123</password>
+      <password>demo123</password>
       <role>Admin</role>
       <fullName>Sarah Connor</fullName>
-      <email>sarah.c@nsqtech.com</email>
+      <email>sarah.c@gmail.com</email>
       <designation>Senior HR Operations Manager</designation>
       <department>Operations</department>
     </user>
@@ -76,7 +77,7 @@
     <record>
       <id>REC-2026-004</id>
       <candidateName>Diana Prince</candidateName>
-      <email>diana.p@waynecorp.com</email>
+      <email>diana.p@gmail.com</email>
       <checkType>Address &amp; ID Check</checkType>
       <company>Global Safe</company>
       <status>Verified</status>
@@ -86,7 +87,7 @@
     <record>
       <id>REC-2026-005</id>
       <candidateName>Ethan Hunt</candidateName>
-      <email>ethan.hunt@imf.org</email>
+      <email>ethan.hunt@gmail.com</email>
       <checkType>Employment Verification</checkType>
       <company>IMF Solutions</company>
       <status>In Progress</status>
@@ -96,7 +97,7 @@
     <record>
       <id>REC-2026-006</id>
       <candidateName>Fiona Gallagher</candidateName>
-      <email>fiona.g@southside.org</email>
+      <email>fiona.g@gmail.com</email>
       <checkType>Credit History Check</checkType>
       <company>Apex Finance</company>
       <status>Failed</status>

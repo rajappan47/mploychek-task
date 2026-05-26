@@ -28,11 +28,11 @@ export class LoginComponent {
   protected useDemoCredentials(type: 'admin' | 'general'): void {
     if (type === 'admin') {
       this.username = 'admin';
-      this.password = 'admin123';
+      this.password = 'demo123';
       this.role = 'Admin';
     } else {
       this.username = 'general';
-      this.password = 'general123';
+      this.password = 'demo123';
       this.role = 'General User';
     }
     this.errorMessage.set(null);
